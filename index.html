@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DAMA – Two Player</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ══ LOBBY SCREEN ══ -->
+  <div class="screen" id="lobby-screen">
+    <h1>DAMA</h1>
+    <p class="subtitle">Classic Board Game &nbsp;•&nbsp; 2 Players</p>
+    <div class="card">
+      <h3>🎮 How to Connect over Hotspot</h3>
+      <small>
+        1. Both devices connect to the <b>same Wi-Fi hotspot</b>.<br>
+        2. Player 1 clicks <b>Host Game</b> → copies the offer code.<br>
+        3. Player 2 clicks <b>Join Game</b> → pastes offer → copies answer.<br>
+        4. Player 1 pastes the answer → game starts!
+      </small>
+    </div>
+    <div class="row">
+      <button class="btn primary" onclick="startHost()">Host Game (Player 1)</button>
+      <button class="btn"         onclick="startJoin()">Join Game (Player 2)</button>
+    </div>
+    <button class="btn sm" onclick="startLocal()">Play Locally (same device)</button>
+  </div>
+
+  <!-- ══ HOST SCREEN ══ -->
+  <div class="screen hidden" id="host-screen">
+    <h1>DAMA</h1>
+    <p class="subtitle">Hosting – Player 1 (Red)</p>
+    <div class="card">
+      <h3>Step 1 — Your Offer Code</h3>
+      <small>Copy this and send it to Player 2 (WhatsApp, chat, etc.)</small>
+      <textarea id="host-offer" readonly placeholder="Generating offer…"></textarea>
+      <button class="btn sm" onclick="copyText('host-offer')">Copy Offer</button>
+    </div>
+    <div class="card">
+      <h3>Step 2 — Paste Player 2's Answer</h3>
+      <textarea id="host-answer" placeholder="Paste answer code here…"></textarea>
+      <div class="row">
+        <button class="btn primary" onclick="hostAcceptAnswer()">Connect!</button>
+        <span id="host-status" class="status-badge badge-waiting">Waiting…</span>
+      </div>
+    </div>
+    <button class="btn sm danger" onclick="goLobby()">← Back</button>
+  </div>
+
+  <!-- ══ JOIN SCREEN ══ -->
+  <div class="screen hidden" id="join-screen">
+    <h1>DAMA</h1>
+    <p class="subtitle">Joining – Player 2 (White)</p>
+    <div class="card">
+      <h3>Step 1 — Paste Host's Offer Code</h3>
+      <textarea id="join-offer" placeholder="Paste offer code here…"></textarea>
+      <button class="btn primary" onclick="joinMakeAnswer()">Generate Answer</button>
+    </div>
+    <div class="card">
+      <h3>Step 2 — Your Answer Code</h3>
+      <small>Copy this and send it back to Player 1.</small>
+      <textarea id="join-answer" readonly placeholder="Answer will appear here…"></textarea>
+      <div class="row">
+        <button class="btn sm" onclick="copyText('join-answer')">Copy Answer</button>
+        <span id="join-status" class="status-badge badge-waiting">Waiting…</span>
+      </div>
+    </div>
+    <button class="btn sm danger" onclick="goLobby()">← Back</button>
+  </div>
+
+  <!-- ══ GAME SCREEN ══ -->
+  <div class="screen hidden" id="game-screen">
+
+    <!-- LEFT PANEL — Player 2 (White) -->
+    <div class="side-panel">
+      <div class="player-card" id="p2-card">
+        <div class="piece-preview p2-preview"></div>
+        <div class="player-name" id="p2-name">Player 2</div>
+        <div class="turn-label">YOUR TURN</div>
+        <div class="piece-count" id="p2-count">12 pieces</div>
+      </div>
+      <div>
+        <div class="captured-label">CAPTURED</div>
+        <div class="captured-dots" id="p2-caps"></div>
+      </div>
+      <div class="info-box">
+        <b>DAMA Rules</b><br>
+        Pieces move diagonally.<br>
+        Capture by jumping over.<br>
+        Reach far row → King!<br>
+        Kings move any distance.
+      </div>
+    </div>
+
+    <!-- BOARD -->
+    <div class="board-wrap">
+      <div id="board"></div>
+    </div>
+
+    <!-- RIGHT PANEL — Player 1 (Red) -->
+    <div class="side-panel">
+      <div class="player-card" id="p1-card">
+        <div class="piece-preview p1-preview"></div>
+        <div class="player-name" id="p1-name">Player 1</div>
+        <div class="turn-label">YOUR TURN</div>
+        <div class="piece-count" id="p1-count">12 pieces</div>
+      </div>
+      <div>
+        <div class="captured-label">CAPTURED</div>
+        <div class="captured-dots" id="p1-caps"></div>
+      </div>
+      <div class="log-box" id="log"></div>
+      <div class="row" style="justify-content:center; gap:8px;">
+        <button class="btn sm danger" onclick="confirmReset()">New Game</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ WIN OVERLAY ══ -->
+  <div id="win-overlay" class="hidden">
+    <div id="win-text">Player 1 Wins!</div>
+    <div id="win-sub">All opponent pieces captured</div>
+    <button class="btn primary" onclick="resetGame()">Play Again</button>
+    <button class="btn sm danger" onclick="goLobby()">Main Menu</button>
+  </div>
+
+  <script src="game.js"></script>
+</body>
+</html>
